@@ -1,9 +1,10 @@
+import base64
 from flask import Flask, request, jsonify
 import os
 import dotenv
-import db.db as db
 import services.chunk_service as chunk_service
 from exceptions.error import Error
+from formatters.chunk import to_str_chunk, to_byte_chunk
 
 dotenv.load_dotenv()
 
@@ -13,12 +14,14 @@ app = Flask(__name__)
 @app.route("/chunk", methods=["POST"])
 def upload_chunk():
     try:
+        data = request.get_json()
         inserted_chunk = chunk_service.insert(
-            request.form["id"],
-            request.form["chunk"],
-            request.form["next_chunk_id"],
-            request.form["next_chunk_node_id"],
+            data["id"],
+            to_byte_chunk(data["chunk"]),
+            data["next_chunk_id"],
+            str(data["next_chunk_node_id"]),
         )
+        inserted_chunk["chunk"] = to_str_chunk(inserted_chunk["chunk"])
         return jsonify(inserted_chunk)
     except Error as e:
         print(f"Error: {e.message}")
@@ -31,8 +34,9 @@ def upload_chunk():
 @app.route("/chunk/<chunk_id>", methods=["GET"])
 def get_chunk_by_id(chunk_id):
     try:
-        chunk = chunk_service.get_one(chunk_id)
-        return jsonify(chunk)
+        chunk_data = chunk_service.get_one(chunk_id)
+        chunk_data["chunk"] = to_str_chunk(chunk_data["chunk"])
+        return jsonify(chunk_data)
     except Error as e:
         print(f"Error: {e.message}")
         return jsonify({"error": e.message}), e.status_code

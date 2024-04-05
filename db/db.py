@@ -1,6 +1,8 @@
 import os
 import dotenv
 from pymongo import MongoClient
+from formatters.db import from_db, to_db
+from validators.validator import validate_chunk_data, validate_id
 
 dotenv.load_dotenv()
 
@@ -12,17 +14,17 @@ chunk_data_table = db["chunkdata"]
 
 
 def insert(chunk_data):
-    chunk_data["_id"] = chunk_data["id"]
-    del chunk_data["id"]
+    validate_chunk_data(chunk_data, with_id=True)
+    to_db(chunk_data)
     chunk_data_table.insert_one(chunk_data)
-    chunk_data["id"] = str(chunk_data["_id"])
-    del chunk_data["_id"]
+    validate_chunk_data(chunk_data, with_db_id=True)
+    from_db(chunk_data)
+    return chunk_data
 
 
 def get_one(chunk_id):
+    validate_id(chunk_id)
     chunk_data = chunk_data_table.find_one({"_id": chunk_id})
-    if chunk_data:
-        chunk_data["id"] = str(chunk_data["_id"])
-        del chunk_data["_id"]
-        return chunk_data
-    raise Exception("Chunk not found.")
+    validate_chunk_data(chunk_data, with_db_id=True)
+    from_db(chunk_data)
+    return chunk_data

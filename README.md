@@ -25,7 +25,13 @@ git clone https://github.com/jananga99/node-server.git
 cd node-server
 ```
 
-3. Create a virtual environment:
+3. Create the .env
+
+```bash
+cp .env.example .env
+```
+
+4. Create a virtual environment:
 
 ```bash
 python3 -m venv .venv

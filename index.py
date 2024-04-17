@@ -1,4 +1,3 @@
-import base64
 from flask import Flask, request, jsonify
 import os
 import dotenv

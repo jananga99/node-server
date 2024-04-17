@@ -1,4 +1,3 @@
-from bson import ObjectId
 from exceptions.error import Error
 
 
@@ -32,6 +31,6 @@ def validate_chunk(chunk):
 
 
 def validate_id(id):
-    if type(id) is not str and type(id) is not ObjectId:
+    if type(id) is not str:
         raise Error(f"id: {id} is not a string, but {type(id)}", 500)
     return id

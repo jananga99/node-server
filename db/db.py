@@ -11,7 +11,6 @@ dotenv.load_dotenv()
 
 
 db_url = os.getenv("DB_URL", "sqlite:///data.db")
-db_name = os.getenv("DB", "chunkdata")
 
 engine = create_engine(db_url)
 ChunkData_Base.metadata.create_all(engine)

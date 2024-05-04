@@ -59,6 +59,13 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Alternatively, ```pre.sh``` can be used to automate steps 4 and 5
+
+```bash
+chmod +x ./pre.sh
+./pre.sh
+```
+
 ## Usage
 
 ### Running the Server
@@ -67,6 +74,13 @@ To start the server, run the following command:
 
 ```bash
 python3 index.py
+```
+
+Alternatively, ```start.sh``` can be used.
+
+```bash
+chmod +x ./start.sh
+./start.sh
 ```
 
 ### Interacting with the Server

@@ -39,3 +39,17 @@ def get_one(chunk_id):
     session.close()
     validate_chunk_data(chunk_data, with_id=True)
     return chunk_data
+
+
+def delete(chunk_id):
+    validate_id(chunk_id)
+    session = Session()
+    chunk_data = session.query(ChunkData).filter_by(_id=chunk_id).first()
+    if chunk_data is None:
+        return Error(f"Chunk data with id: {chunk_id} not found", 404)
+    session.delete(chunk_data)
+    session.commit()
+    chunk_data = from_db(chunk_data)
+    session.close()
+    validate_chunk_data(chunk_data, with_id=True)
+    return chunk_data

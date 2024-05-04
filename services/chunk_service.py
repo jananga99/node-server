@@ -26,3 +26,10 @@ def get_one(chunk_id):
     chunk = db.get_one(chunk_id)
     validate_chunk_data(chunk, with_id=True)
     return chunk
+
+
+def delete(chunk_id):
+    validate_id(chunk_id)
+    chunk = db.delete(chunk_id)
+    validate_chunk_data(chunk, with_id=True)
+    return chunk

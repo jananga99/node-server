@@ -44,6 +44,21 @@ def get_chunk_by_id(chunk_id):
         return jsonify({"error": "Unexpected error occured"}), 500
 
 
+# Delete by chunk id
+@app.route("/chunk/<chunk_id>", methods=["DELETE"])
+def delete_chunk_by_id(chunk_id):
+    try:
+        chunk_data = chunk_service.delete(chunk_id)
+        chunk_data["chunk"] = to_str_chunk(chunk_data["chunk"])
+        return jsonify(chunk_data)
+    except Error as e:
+        print(f"Error: {e.message}")
+        return jsonify({"error": e.message}), e.status_code
+    except Exception as e:
+        print("Unexpected error occured", e)
+        return jsonify({"error": "Unexpected error occured"}), 500
+
+
 if __name__ == "__main__":
     app.run(
         debug=True, port=int(os.getenv("PORT", 6000))

@@ -1,0 +1,8 @@
+version: "3.0"
+services:
+  node-one:
+    ports:
+      - "5001:6000"
+  node-two:
+    ports:
+      - "5002:6000"
